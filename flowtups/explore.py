@@ -1,4 +1,6 @@
 
+# This script explores flow tuples
+
 import sys
 from collections import defaultdict
 
