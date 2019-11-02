@@ -38,10 +38,12 @@ def process_fname(fname, hourepoch):
 
 
 begin_reqd_min = int(sys.argv[1])
-end_reqd_min = int(sys.argv[2])
+# Subtract 60 seconds since we are not including the end_baseline_min. That is: if we specify baseline hours to be from 2:00 to 3:00, we don't want to include the 3:00 to 3:01 minute.
+end_reqd_min = int(sys.argv[2]) - 60
 
 begin_baseline_min  = int(sys.argv[3])
-end_baseline_min = int(sys.argv[4])
+# Subtract 60 seconds since we are not including the end_baseline_min. That is: if we specify baseline hours to be from 2:00 to 3:00, we don't want to include the 3:00 to 3:01 minute.
+end_baseline_min = int(sys.argv[4]) - 60 
 
 inp_path = sys.argv[5]
 # Ensure there is a trailing slash at the end of the path, so that the find command can work correctly
@@ -98,6 +100,20 @@ for full_fname in fnames_split:
     sys.stderr.write("Length of port_to_ips: {0}\n".format(len(port_to_ips) ) )
 
 
+# Use this code for testing output against find_level_shift_given_hour.py
+# def temp_write(port_to_ips, temp_op_fp):
+
+#     for dstport in port_to_ips:
+#         for minute_num in port_to_ips[dstport]:
+#             temp_op_fp.write("{0} {1} {2}\n".format(dstport, minute_num, port_to_ips[dstport][minute_num]) )
+
+
+# temp_op_fp_1 = open('test1', 'w')
+# temp_write(port_to_ips, temp_op_fp_1)
+# temp_op_fp_2 = open('test2', 'w')
+# temp_write(baseline_port_to_ips, temp_op_fp_2)
+
+    
 for dstport in port_to_ips:
     avg = sum(port_to_ips[dstport].values() )/float(len(port_to_ips[dstport]) )
 

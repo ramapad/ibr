@@ -42,6 +42,24 @@ for line in fp:
         baseline_port_to_ips[dstport][minute_num] += ips
 
 
+# Use this code for testing find_level_shift.py
+# def temp_write(port_to_ips, temp_op_fp):
+
+#     for dstport in port_to_ips:
+#         for minute_num in port_to_ips[dstport]:
+#             minute_num_within_hour = int(minute_num)
+#             # minute_num_epoch = 1570791600 + 60 * minute_num_within_hour # Oct 11 2019 11:00
+#             # minute_num_epoch = 1570795200 + 60 * minute_num_within_hour # Oct 11 2019 12:00
+#             minute_num_epoch = 1570798800 + 60 * minute_num_within_hour # Oct 11 2019 12:00            
+#             temp_op_fp.write("{0} {1} {2}\n".format(dstport, minute_num_epoch, port_to_ips[dstport][minute_num]) )
+
+
+# temp_op_fp_1 = open('temp1', 'w')
+# temp_write(port_to_ips, temp_op_fp_1)
+# temp_op_fp_2 = open('temp2', 'w')
+# temp_write(baseline_port_to_ips, temp_op_fp_2)
+        
+        
 for dstport in port_to_ips:
     avg = sum(port_to_ips[dstport].values() )/float(len(port_to_ips[dstport]) )
 
