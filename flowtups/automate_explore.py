@@ -48,6 +48,10 @@ if __name__=="__main__":
     reqd_month = this_h_dt.month
     reqd_day = this_h_dt.day
 
+    if istimed == 0:
+        starttime = hourepoch
+        endtime = hourepoch + 3600
+        
     this_h_dt_str = this_h_dt.strftime("%Y_%m_%d_%H_%M")
     this_dir = './data/{0}/{1}_{2}/'.format(pfx, this_h_dt_str, hourepoch)
     mkdir_cmd = 'mkdir -p {0}'.format(this_dir)

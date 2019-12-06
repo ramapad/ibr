@@ -3,8 +3,6 @@
 # It should also take as input the specific experiment we are interested in, specified by a directory hierarchy.
 # It should also take as input the feature (ttl, iplen etc.) that we are interested in
 
-# TODO: Find a way to test this script more thoroughly
-
 import sys
 import shlex, subprocess
 from collections import defaultdict
@@ -73,7 +71,7 @@ for full_fname in fnames_split:
     if 'prot_dstport_' in full_fname:
         continue
     
-    sys.stderr.write("Found {0}\n".format(full_fname) )    
+    # sys.stderr.write("Found {0}\n".format(full_fname) )    
     
     parts = full_fname.strip().split('/')
 
@@ -90,8 +88,8 @@ for full_fname in fnames_split:
     # Suppose the begin_baseline_min = 9:59 AM. Then we would need minute 59 from the 9 AM file
     # Suppose the end_baseline_min = 11:01 AM. Then we would need minute 1 from the 11 AM file
     # TODO: Write these comments above in a better way. Change the variable names from min_thresh and max_thresh to something better
-    min_thresh = begin_baseline_min - (fname_end_time - fname_begin_time)
-    max_thresh = end_baseline_min + (fname_end_time - fname_begin_time)
+    min_thresh = min(begin_baseline_min, begin_reqd_min) - (fname_end_time - fname_begin_time)
+    max_thresh = max(end_baseline_min, end_reqd_min) + (fname_end_time - fname_begin_time)
 
     if fname_begin_time >= min_thresh and fname_end_time <= max_thresh:
         process_fname(full_fname, hourepoch)
