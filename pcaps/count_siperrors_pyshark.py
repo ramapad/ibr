@@ -12,7 +12,7 @@ op_fname = sys.argv[2]
 
 num_pkts = 0
 
-pkts = pyshark.FileCapture(inp_fname)
+pkts = pyshark.FileCapture(inp_fname, keep_packets = False)
 
 pkts_per_typ = defaultdict(int)
 
@@ -22,8 +22,8 @@ for pkt in pkts:
     if num_pkts%10000 == 0:
         sys.stderr.write("Done with {0} packets at: {1}\n".format(num_pkts, str(datetime.datetime.now() ) ) )
 
-    # if num_pkts%100000 == 0:
-    #     break
+    if num_pkts%800000 == 0:
+        break
 
     if (pkt.highest_layer == "SIP"):
         if "method" in pkt.sip.field_names:
