@@ -73,7 +73,7 @@ def flush_prev_minute(prev_minute_num, pkts, fp, src_ports_per_min, src_ports_fp
 
 if __name__=="__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:t:s:e:b:i:p:f:u", ["hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "prefix=", "suffix=", "usage="])
+        opts, args = getopt.getopt(sys.argv[1:], "h:t:s:e:b:i:p:f:u", ["hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "fnameprefix=", "fnamesuffix=", "usage="])
         
     except getopt.GetoptError as err:
         print str(err)
@@ -101,9 +101,9 @@ if __name__=="__main__":
             issubset = int(a)
         elif o in ("-i", "--inputaddrfile"):
             inputaddrfile = a            
-        elif o in ("-p", "--prefix"):
+        elif o in ("-p", "--fnameprefix"):
             pfx = a
-        elif o in ("-f", "--suffix"):
+        elif o in ("-f", "--fnamesuffix"):
             suf = a
         else:
             assert False, "unhandled option"
@@ -113,6 +113,9 @@ if __name__=="__main__":
     # print inputaddrfile
     # print suf
 
+    if suf == None:
+        if istimed == 0:
+            suf = "{0}_to_{1}".format(hourepoch, hourepoch + 3600)
     
     if issubset == 1:
         reqd_addrs = set()

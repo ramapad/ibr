@@ -7,7 +7,7 @@ import getopt
 
 if __name__=="__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:t:s:e:b:i:p:n:u", ["hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "prefix=", "numprocs=", "usage="])
+        opts, args = getopt.getopt(sys.argv[1:], "h:t:s:e:b:i:p:n:u", ["hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "fnameprefix=", "numprocs=", "usage="])
         
     except getopt.GetoptError as err:
         print str(err)
@@ -36,7 +36,7 @@ if __name__=="__main__":
             issubset = int(a)
         elif o in ("-i", "--inputaddrfile"):
             inputaddrfile = a            
-        elif o in ("-p", "--prefix"):
+        elif o in ("-p", "--fnameprefix"):
             pfx = a
         elif o in ("-n", "--numprocs"):
             numprocs = int(a)
@@ -60,7 +60,7 @@ if __name__=="__main__":
     # print args
     subprocess.call(args)
     
-    # os.system("cors2ascii swift://data-telescope-meta-flowtuple/datasource=ucsd-nt/year={0}/month={1}/day={2}/ucsd-nt.{3}.flowtuple.cors.gz | python explore.py --hourepoch {3} --istimed 1 --issubset 1 --inputaddrfile {4} --prefix {5} --suffix {6}".format(reqd_year, reqd_month, reqd_day, hourepoch, inputaddrfile, pfx, suf) )
+    # os.system("cors2ascii swift://data-telescope-meta-flowtuple/datasource=ucsd-nt/year={0}/month={1}/day={2}/ucsd-nt.{3}.flowtuple.cors.gz | python explore.py --hourepoch {3} --istimed 1 --issubset 1 --inputaddrfile {4} --fnameprefix {5} --fnamesuffix {6}".format(reqd_year, reqd_month, reqd_day, hourepoch, inputaddrfile, pfx, suf) )
 
 
     max_secs = endtime - starttime
@@ -71,10 +71,10 @@ if __name__=="__main__":
     if issubset == 0:
         for this_t in range(starttime, endtime, binsize):
             suf = "{0}_to_{1}".format(this_t, this_t + binsize)        
-            sys.stdout.write("cors2ascii swift://data-telescope-meta-flowtuple/datasource=ucsd-nt/year={0}/month={1}/day={2}/ucsd-nt.{3}.flowtuple.cors.gz | python explore.py --hourepoch {3} --istimed 1 --starttime {4} --endtime {5} --prefix {6} --suffix {7} > {8}stdout{9} 2>{8}stderr{9} \n".format(reqd_year, reqd_month, reqd_day, hourepoch, this_t, this_t + binsize, pfx, suf, this_dir, proc_num) )
+            sys.stdout.write("cors2ascii swift://data-telescope-meta-flowtuple/datasource=ucsd-nt/year={0}/month={1}/day={2}/ucsd-nt.{3}.flowtuple.cors.gz | python explore.py --hourepoch {3} --istimed 1 --starttime {4} --endtime {5} --fnameprefix {6} --fnamesuffix {7} > {8}stdout{9} 2>{8}stderr{9} \n".format(reqd_year, reqd_month, reqd_day, hourepoch, this_t, this_t + binsize, pfx, suf, this_dir, proc_num) )
             proc_num += 1
     else:
         for this_t in range(starttime, endtime, binsize):
             suf = "{0}_to_{1}".format(this_t, this_t + binsize)
-            sys.stdout.write("cors2ascii swift://data-telescope-meta-flowtuple/datasource=ucsd-nt/year={0}/month={1}/day={2}/ucsd-nt.{3}.flowtuple.cors.gz | python explore.py --hourepoch {3} --istimed 1 --starttime {4} --endtime {5} --issubset 1 --inputaddrfile {6} --prefix {7} --suffix {8} > {9}stdout{10} 2>{9}stderr{10} \n".format(reqd_year, reqd_month, reqd_day, hourepoch, this_t, this_t + binsize, inputaddrfile, pfx, suf, this_dir, proc_num) )
+            sys.stdout.write("cors2ascii swift://data-telescope-meta-flowtuple/datasource=ucsd-nt/year={0}/month={1}/day={2}/ucsd-nt.{3}.flowtuple.cors.gz | python explore.py --hourepoch {3} --istimed 1 --starttime {4} --endtime {5} --issubset 1 --inputaddrfile {6} --fnameprefix {7} --fnamesuffix {8} > {9}stdout{10} 2>{9}stderr{10} \n".format(reqd_year, reqd_month, reqd_day, hourepoch, this_t, this_t + binsize, inputaddrfile, pfx, suf, this_dir, proc_num) )
             proc_num += 1            
