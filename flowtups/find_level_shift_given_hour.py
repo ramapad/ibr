@@ -27,7 +27,9 @@ for line in fp:
     dstport = parts[1].strip()
     ips = int(parts[ips_field_num].strip() )
 
-    if minute_num >= reqd_minute_nums[0] and minute_num <= reqd_minute_nums[-1]:
+    # if minute_num >= reqd_minute_nums[0] and minute_num <= reqd_minute_nums[-1]:
+    if minute_num >= begin_min and minute_num < end_min:    
+        
         if dstport not in port_to_ips:
             port_to_ips[dstport] = defaultdict(int)
         # if minute_num not in port_to_ips[dstport]:
