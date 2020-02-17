@@ -4,6 +4,8 @@
 import sys
 import getopt
 import datetime
+import dateutil
+from dateutil.parser import parse
 import os
 from collections import defaultdict
 
@@ -73,12 +75,13 @@ def flush_prev_minute(prev_minute_num, pkts, fp, src_ports_per_min, src_ports_fp
 
 if __name__=="__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:t:s:e:b:i:p:f:u", ["hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "fnameprefix=", "fnamesuffix=", "usage="])
+        opts, args = getopt.getopt(sys.argv[1:], "r:t:s:e:b:i:p:f:u", ["hourstr=", "hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "fnameprefix=", "fnamesuffix=", "usage="])
         
     except getopt.GetoptError as err:
         print str(err)
         sys.exit(1)
 
+    hourstr = None        
     hourepoch = None
     istimed = 0
     starttime = None
@@ -91,6 +94,8 @@ if __name__=="__main__":
     for o, a in opts:
         if o in ("-h", "--hourepoch"):
             hourepoch = int(a)
+        elif o in ("-s", "--hourstr"):
+            hourstr = a            
         elif o in ("-t", "--istimed"):
             istimed = int(a)
         elif o in ("-s", "--starttime"):
@@ -113,6 +118,15 @@ if __name__=="__main__":
     # print inputaddrfile
     # print suf
 
+    # If the reqd hour has been specified as a string, convert to epoch time
+    if hourstr != None:
+        # sys.stdout.write("{0}\n".format(hourstr) )        
+        hour_struct = dateutil.parser.parse(hourstr)
+        hourepoch = int(calendar.timegm(hour_struct.utctimetuple()))
+
+    # sys.stdout.write("{0}\n".format(hourepoch) )
+    # sys.exit(1)
+    
     if suf == None:
         if istimed == 0:
             suf = "{0}_to_{1}".format(hourepoch, hourepoch + 3600)

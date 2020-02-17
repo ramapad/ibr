@@ -10,7 +10,7 @@ import calendar
 
 if __name__=="__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "s:h:t:s:e:b:i:p:n:u", ["hourstr=", "hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "fnameprefix=", "numprocs=", "usage="])
+        opts, args = getopt.getopt(sys.argv[1:], "r:h:t:s:e:b:i:p:n:u", ["hourstr=", "hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "fnameprefix=", "numprocs=", "usage="])
         
     except getopt.GetoptError as err:
         print str(err)
