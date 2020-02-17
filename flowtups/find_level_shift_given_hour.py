@@ -17,6 +17,14 @@ ips_field_num = int(sys.argv[4])
 # min_numsrcaddr_thresh is the minimum number of source addresses for a dstport (or srcport, iplen) we need to observe during the spike for us to be concerned that this particular dstport has some particularly anomalous behavior
 min_numsrcaddr_thresh = int(sys.argv[5])
 
+delta_thresh = 20
+if len(sys.argv) == 7: # We've specified a different delta threshold
+    delta_thresh = int(sys.argv[6])
+delta_multiplier = 1 + delta_thresh/float(100)
+    
+# print len(sys.argv)
+# sys.exit(1)
+
 
 reqd_minute_nums = range(begin_min, end_min)
 
@@ -69,7 +77,8 @@ for dstport in port_to_ips:
     if dstport in baseline_port_to_ips:
         baseline_avg = sum(baseline_port_to_ips[dstport].values() )/float(len(baseline_port_to_ips[dstport]) )
 
-        if avg > baseline_avg * 1.2 and avg > min_numsrcaddr_thresh:
+        # if avg > baseline_avg * 1.2 and avg > min_numsrcaddr_thresh:
+        if avg > baseline_avg * delta_multiplier and avg > min_numsrcaddr_thresh:            
             sys.stdout.write("{0} {1:.2f} {2:.2f}\n".format(dstport, avg, baseline_avg) )
 
     # If no addresses were sending traffic to the dstport during baseline minutes and if there are a significant number of addresses sending traffic during non-baseline, let's record it.
