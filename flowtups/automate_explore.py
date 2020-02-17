@@ -2,17 +2,21 @@
 import sys
 import shlex, subprocess
 import datetime
+import dateutil
+from dateutil.parser import parse
 import getopt
+import calendar
 
 
 if __name__=="__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h:t:s:e:b:i:p:n:u", ["hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "fnameprefix=", "numprocs=", "usage="])
+        opts, args = getopt.getopt(sys.argv[1:], "s:h:t:s:e:b:i:p:n:u", ["hourstr=", "hourepoch=", "istimed=", "starttime=", "endtime=", "issubset=", "inputaddrfile=", "fnameprefix=", "numprocs=", "usage="])
         
     except getopt.GetoptError as err:
         print str(err)
         sys.exit(1)
 
+    hourstr = None
     hourepoch = None
     istimed = None
     starttime = None
@@ -26,6 +30,8 @@ if __name__=="__main__":
     for o, a in opts:
         if o in ("-h", "--hourepoch"):
             hourepoch = int(a)
+        elif o in ("-s", "--hourstr"):
+            hourstr = a
         elif o in ("-t", "--istimed"):
             istimed = int(a)
         elif o in ("-s", "--starttime"):
@@ -42,6 +48,15 @@ if __name__=="__main__":
             numprocs = int(a)
         else:
             assert False, "unhandled option"
+
+    # If the reqd hour has been specified as a string, convert to epoch time
+    if hourstr != None:
+        # sys.stdout.write("{0}\n".format(hourstr) )        
+        hour_struct = dateutil.parser.parse(hourstr)
+        hourepoch = int(calendar.timegm(hour_struct.utctimetuple()))
+
+    # sys.stdout.write("{0}\n".format(hourepoch) )
+    # sys.exit(1)
     
     this_h_dt = datetime.datetime.utcfromtimestamp(hourepoch)
     reqd_year = this_h_dt.year
